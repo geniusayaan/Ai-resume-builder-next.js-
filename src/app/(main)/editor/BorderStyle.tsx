@@ -22,7 +22,7 @@ const BorderStyle = ({ borderStyle, onChange }: BorderStyleProps) => {
     onChange(borderStyles[nextIndex]);
   }
 
-  const Icon =
+  const Icon =    
     borderStyle === "square"
       ? Square
       : borderStyle === "circle"
