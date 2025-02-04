@@ -14,10 +14,11 @@ import { cn, mapToResumeValues } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounced";
 import useUnLoadWarning from "@/hooks/useUnloadWarning";
 import useAutoSaveResume from "@/hooks/useAutoSave";
-import { ResumeServerData } from "@/lib/Types";
+// import { ResumeServerData } from "@/lib/Types";
+import { Prisma } from "@prisma/client";
 
 interface ResumeToEdit{
-  resumeToEdit:ResumeServerData | null;
+  resumeToEdit: null;
 }
 
 
@@ -26,7 +27,7 @@ const ResumeEditor = ({resumeToEdit}:ResumeToEdit) => {
 
   const [resumeData, setresumeData] = useState<ResumeValues>(resumeToEdit?mapToResumeValues(resumeToEdit):{});
   const [showSmPreview,setShowSmPreview] = useState(false)
-
+ 
   const {isSaving,hasUnSavedChanges} = useAutoSaveResume(resumeData)
 
   useUnLoadWarning(hasUnSavedChanges)
