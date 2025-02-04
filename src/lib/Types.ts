@@ -1,3 +1,4 @@
+
 import { Prisma } from "@prisma/client";
 import { ResumeValues } from "./validation";
 
@@ -14,9 +15,9 @@ export const resumeDataInclude={
  educations:true
 };
 
-// export type ResumeServerData =  Prisma.ResumeGetPayload<{
-//         include : typeof resumeDataInclude 
-// }>
+export type ResumeServerData =  Prisma.ResumeGetPayload<{
+        include : typeof resumeDataInclude 
+}>
 
 
 

@@ -10,23 +10,25 @@ import Footer from "./Footer";
 import { useState } from "react";
 import { ResumeValues } from "@/lib/validation";
 import ResumePreviewSection from "./ResumePreviewSection";
-// import { cn, mapToResumeValues } from "@/lib/utils";
+import { cn, mapToResumeValues } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounced";
 import useUnLoadWarning from "@/hooks/useUnloadWarning";
 import useAutoSaveResume from "@/hooks/useAutoSave";
-// import { ResumeServerData } from "@/lib/Types";
+import { ResumeServerData } from "@/lib/Types";
 import { Prisma } from "@prisma/client";
-import { cn } from "@/lib/utils";
-
-// interface ResumeToEdit{
-//   resumeToEdit: null;
-// }
 
 
-const ResumeEditor = () => {
+interface ResumeToEdit{
+  resumeToEdit: ResumeServerData | null;
+}
+
+
+const ResumeEditor = ({resumeToEdit}:ResumeToEdit) => {
   const searchParams = useSearchParams();
 
-  const [resumeData, setresumeData] = useState<ResumeValues>({});
+  const [resumeData, setresumeData] = useState<ResumeValues>(resumeToEdit?
+    mapToResumeValues(resumeToEdit):{}
+  );
 
   const [showSmPreview,setShowSmPreview] = useState(false)
  
