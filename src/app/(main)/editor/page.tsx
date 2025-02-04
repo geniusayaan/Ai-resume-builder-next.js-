@@ -8,7 +8,7 @@ import { resumeDataInclude } from "@/lib/Types";
 export const metadata: Metadata = {
   title: "Design your resume",
 };
-
+ 
 interface PageProps {
   searchParams: Promise<{ resumeId?: string }>;
 }
