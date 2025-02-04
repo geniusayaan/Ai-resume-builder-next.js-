@@ -18,12 +18,12 @@ import useAutoSaveResume from "@/hooks/useAutoSave";
 import { Prisma } from "@prisma/client";
 import { cn } from "@/lib/utils";
 
-interface ResumeToEdit{
-  resumeToEdit: null;
-}
+// interface ResumeToEdit{
+//   resumeToEdit: null;
+// }
 
 
-const ResumeEditor = ({resumeToEdit}:ResumeToEdit) => {
+const ResumeEditor = () => {
   const searchParams = useSearchParams();
 
   const [resumeData, setresumeData] = useState<ResumeValues>({});
