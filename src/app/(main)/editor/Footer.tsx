@@ -29,7 +29,7 @@ export default function Footer({
 
   return (
     <footer className="w-full pt-2 grow  flex items-center justify-center  p-2  border-t">
-      <div className="flex  justify-between  md:px-4 sm:px-2 lg:px-32 xl:px-38  items-center w-full">
+      <div className="flex  justify-between  md:px-4 sm:px-2 lg:px-20 xl:px-24  items-center w-full">
         <div className="flex gap-2">
           <Button
             className="w-[65px] h-[25px] px-4  text-sm md:w-[150px] md:h-[40px]"
@@ -57,12 +57,13 @@ export default function Footer({
         >
           {showSmPreview ? <PenLine /> : <FileUser />}
         </Button>
-        <div className="text-muted-foreground ">
+        <div className="text-muted-foreground flex gap-8 justify-between items-center" >
           <Link href={"/resumes"}>Close</Link>
-        </div>
-        <div className={cn("text-muted-foreground opacity-0",isSaving&&"opacity-100")}>
+          <div className={cn("text-muted-foreground opacity-0",isSaving&&"opacity-100")}>
           ...Saving
         </div>
+        </div>
+        
       </div>
     </footer>
   );
