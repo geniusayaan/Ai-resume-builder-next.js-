@@ -40,7 +40,7 @@ export const workExperiencesSchema = z.object({
         company: optionalString,
         startDate: optionalString,
         endDate: optionalString,
-        descrption: optionalString,
+        description: optionalString,
       })
     )
     .optional(),

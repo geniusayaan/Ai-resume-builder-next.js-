@@ -13,6 +13,8 @@ export async function saveResume(values: ResumeValues) {
 
   const { userId } = await auth();
 
+  
+
   if (!userId) {
     throw new Error("user not authenticated");
   }
@@ -55,6 +57,8 @@ export async function saveResume(values: ResumeValues) {
           create: workExperiences?.map((exp) => ({
             ...exp,
             startDate: exp.startDate ? new Date(exp.startDate) : undefined,
+            endDate: exp.endDate ? new Date(exp.endDate) : undefined,
+
           })),
         },
         educations: {
@@ -62,6 +66,8 @@ export async function saveResume(values: ResumeValues) {
           create: educations?.map((edu) => ({
             ...edu,
             startDate: edu.startDate ? new Date(edu.startDate) : undefined,
+            endDate: edu.endDate ? new Date(edu.endDate) : undefined,
+
           })),
         },
         updatedAt: new Date(),
@@ -77,7 +83,7 @@ export async function saveResume(values: ResumeValues) {
           create: workExperiences?.map((exp) => ({
             ...exp,
             startDate: exp.startDate ? new Date(exp.startDate) : undefined,
-            endDate: exp.endDate ? new Date(exp.endDate) : undefined,
+            endDate: exp.endDate?.length==0 ? new Date(exp.endDate) : undefined,
           })),
         },
         educations: {
