@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import Brudscrumb from "./Brudscrumb";
 import Footer from "./Footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ResumeValues } from "@/lib/validation";
 import ResumePreviewSection from "./ResumePreviewSection";
 import { cn, mapToResumeValues } from "@/lib/utils";
@@ -15,7 +15,7 @@ import useDebounce from "@/hooks/useDebounced";
 import useUnLoadWarning from "@/hooks/useUnloadWarning";
 import useAutoSaveResume from "@/hooks/useAutoSave";
 import { ResumeServerData } from "@/lib/Types";
-import { Prisma } from "@prisma/client";
+
 
 
 interface ResumeToEdit{
@@ -23,13 +23,13 @@ interface ResumeToEdit{
 }
 
 
-const ResumeEditor = ({resumeToEdit}:ResumeToEdit) => {
+const ResumeEditor =  ({resumeToEdit}:ResumeToEdit) => {
   const searchParams = useSearchParams();
 
   const [resumeData, setresumeData] = useState<ResumeValues>(resumeToEdit?
     mapToResumeValues(resumeToEdit):{}
   );
-
+  
   const [showSmPreview,setShowSmPreview] = useState(false)
  
   const {isSaving,hasUnSavedChanges} = useAutoSaveResume(resumeData)
@@ -40,11 +40,13 @@ const ResumeEditor = ({resumeToEdit}:ResumeToEdit) => {
 
   function setStep(key: string) {
     const newSearchParams = new URLSearchParams(searchParams);
+  
     newSearchParams.set("step", key);
     window.history.pushState(null, "", `?${newSearchParams.toString()}`);
   }
+  
 
-  // useBeforeUnReload()
+
 
   const FormComponent = steps.find(
     (steps) => steps.key === currentStep
