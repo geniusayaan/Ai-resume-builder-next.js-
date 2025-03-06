@@ -107,7 +107,7 @@ const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                   company: "",
                   startDate: "",
                   endDate: "",
-                  descrption: "",
+                  description: "",
                 })
               }
             >
@@ -169,7 +169,7 @@ const WorkExperience = ({id, form, index, remove }: WorkExperieneProps) => {
 
       <FormField
         control={form.control}
-        name={`workExperiences.${index}.descrption`}
+        name={`workExperiences.${index}.description`}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Description</FormLabel>
