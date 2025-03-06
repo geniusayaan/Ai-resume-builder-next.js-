@@ -7,7 +7,7 @@ export const GenerateSummary = async (input: GenerateSummaryInput) => {
   const { jobtitle, workExperiences, educations, skills } =
     generateSummarySchema.parse(input);
 
-  const systemMessage = `You are an AI generator for resume.Your job is to make a proffesional introduction summary on a resume by the data given by the user.You have to keep that proffesional.Remember that you have to return only the summary in response not other things only the summary`;
+  const systemMessage = `You are an AI generator for resume.Your job is to make a proffesional introduction summary on a resume by the data given by the user.You have to keep that proffesional.Remember that you do not have to return  other things in the response eg:here it is.you have to give only the portion of the summary in response`;
 
   const userMessage = `You have to create an proffesional summary.Here is the users data:
         Job title:${jobtitle || "N/A"},
