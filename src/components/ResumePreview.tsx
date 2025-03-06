@@ -141,7 +141,7 @@ function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
               )}
             </div>
 
-            <div className="whitespace-pre-line text-xs">{exp.descrption}</div>
+            <div className="whitespace-pre-line text-xs">{exp.description}</div>
           </div>
         ))}
       </div>
