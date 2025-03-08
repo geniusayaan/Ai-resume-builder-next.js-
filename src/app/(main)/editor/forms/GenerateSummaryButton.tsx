@@ -38,7 +38,14 @@ export default  function GenerateSummaryButton({
   return (
       
 
-      <WandSparklesIcon   type="button" className={"px-2 p-1 rounded-md size-10 cursor-pointer border "} onClick={handleClick} aria-disabled={false}>Generate (AI)</WandSparklesIcon>
+    <h1>
+    {
+    loading ? <span className="inline-block w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></span>
+    :
+  <WandSparklesIcon  type="button" className={"px-2 p-1 rounded-md size-10 cursor-pointer border "} onClick={handleClick} aria-disabled={false}>Generate (AI)</WandSparklesIcon>
+    }
+    </h1>
+  
       
    
   );

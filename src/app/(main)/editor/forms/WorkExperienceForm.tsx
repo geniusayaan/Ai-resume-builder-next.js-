@@ -27,6 +27,7 @@ import { GripHorizontal } from "lucide-react";
 import { useEffect } from "react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
+import GenerateWorkExperienceButton from "./GenerateWorkExperienceButton";
 
 const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
   const form = useForm<WorkExperiencesValues>({
@@ -138,6 +139,10 @@ const WorkExperience = ({id, form, index, remove }: WorkExperieneProps) => {
         <GripHorizontal className="cursor-grab"   {...attributes} {...listeners}></GripHorizontal>
       </div>
 
+      <div className="flex justify-center">
+            <GenerateWorkExperienceButton onWorkExperienceGenerated={exp=>form.setValue(`workExperiences.${index}`,exp)}/>
+      </div>
+
       <div className="grid grid-cols-2 gap-2">
         <FormField
           control={form.control}
@@ -207,7 +212,7 @@ const WorkExperience = ({id, form, index, remove }: WorkExperieneProps) => {
             <FormMessage />
           </FormItem>
         )}
-      />
+      />  
 
       <Button variant={"destructive"} onClick={() => remove(index)}>
         Remove

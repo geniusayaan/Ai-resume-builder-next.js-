@@ -1,7 +1,13 @@
 "use server";
 
 import groq from "@/lib/groq";
-import { GenerateSummaryInput, generateSummarySchema } from "@/lib/validation";
+import {
+  GenerateSummaryInput,
+  generateSummarySchema,
+  generateWorkExpereinceSchema,
+  GenerateWorkExperinceInput,
+  WorkExperience,
+} from "@/lib/validation";
 
 export const GenerateSummary = async (input: GenerateSummaryInput) => {
   const { jobtitle, workExperiences, educations, skills } =
@@ -29,8 +35,6 @@ export const GenerateSummary = async (input: GenerateSummaryInput) => {
         )},
           Skills:${skills}`;
 
-  console.log(systemMessage);
-  console.log(userMessage);
 
   const completion = await groq.chat.completions.create({
     messages: [
@@ -47,11 +51,58 @@ export const GenerateSummary = async (input: GenerateSummaryInput) => {
   });
 
   const aiResponse = completion.choices[0].message.content;
-  console.log(aiResponse)
-  if(!aiResponse){
-    throw new Error("failed to generate ai response")
+  console.log(aiResponse);
+  if (!aiResponse) {
+    throw new Error("failed to generate ai response");
   }
+
+  return aiResponse;
+};
+
+export const GenerateWorkExperience = async (
+  input: GenerateWorkExperinceInput
+) => {
+
+  const {description} = generateWorkExpereinceSchema.parse(input)
+
+  const systemMessage = `You are an ai resume generator.Your task is to generate a single work experience enrty according to the user input.Your response should/must adhere the following structure.You can omit fields if they can't be infered from the provided data,but don't any add ones.
   
-  return aiResponse
+  Job title:<job title>
+  Company:<company name>
+  Start date:<format:MM-DD-YYYY>(only if provided)
+  End date:<format:MM-DD-YYYY>(only if provided)
+  Description:<an optimized description in bullet format,might be infered from the job title>
+  `
+
+  const userMessage = ` Please provide a work experience entry from this description:${description}`
+
   
+  const completion = await groq.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: systemMessage,
+      },
+      {
+        role: "user",
+        content: userMessage,
+      },
+    ],
+    model: "llama-3.3-70b-versatile",
+  });
+
+  const aiResponse = completion.choices[0].message.content;
+  console.log(aiResponse);
+  if (!aiResponse) {
+    throw new Error("failed to generate ai response");
+  }
+console.log(aiResponse)
+  return {
+    position:aiResponse.match(/Job title:(.*)/)?.[1] || "",
+    company:aiResponse.match(/Company:(.*)/)?.[1] || "",
+    startDate:aiResponse.match(/Start date:(\d{4}-\d{2}-\d{2})/)?.[1],
+    endDate:aiResponse.match(/End date:(\d{4}-\d{2}-\{2})/)?.[1],
+    description:(aiResponse.match(/Description:([\s\S]*)/)?.[1]||"").trim()
+  } satisfies WorkExperience
+
 };
