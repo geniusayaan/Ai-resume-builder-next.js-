@@ -13,7 +13,7 @@ export default  function Page() {
  </Suspense>
 }
 
- export function ResumePage(){
+  function ResumePage(){
   const router = useRouter()
 
   const searchParams = useSearchParams();
