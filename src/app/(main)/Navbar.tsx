@@ -17,7 +17,7 @@ const Navbar = () => {
     <header className="w-full overflow-hidden  shadow-sm p-2">
       <div className=" w-full sm:px-3 md:px-3 lg:px-7 xl:px-8 flex justify-between items-center">
         
-        <Link href={"/billing"} className="flex items-center gap-2">
+        <Link href={"/resumes"} className="flex items-center gap-2">
           {<Image src={logo} alt="" width={40} height={40} />}
           <span className="md:text-sm font-normal sm:text-sm lg:text-lg xl:text-lg xl:font-bold lg:font-bold ">Ai resume builder</span>
         </Link>

@@ -92,17 +92,32 @@ export const GenerateWorkExperience = async (
   });
 
   const aiResponse = completion.choices[0].message.content;
-  console.log(aiResponse);
+  // console.log(aiResponse);
   if (!aiResponse) {
     throw new Error("failed to generate ai response");
   }
 console.log(aiResponse)
+const formatDate = (date: string | undefined): string | undefined => {
+  if (!date) 
+    return undefined; // Handle missing dates
+
+
+  const match = date.match(/(\d{2})-(\d{2})-(\d{4})/); // MM-DD-YYYY format
+  if (!match) return undefined;
+  const [_, month, day, year] = match; // Correct order
+  return `${year}-${month}-${day}`; // Convert to YYYY-MM-DD
+  
+
+      
+};
   return {
-    position:aiResponse.match(/Job title:(.*)/)?.[1] || "",
-    company:aiResponse.match(/Company:(.*)/)?.[1] || "",
-    startDate:aiResponse.match(/Start date:(\d{4}-\d{2}-\d{2})/)?.[1],
-    endDate:aiResponse.match(/End date:(\d{4}-\d{2}-\{2})/)?.[1],
-    description:(aiResponse.match(/Description:([\s\S]*)/)?.[1]||"").trim()
+    
+
+    position: aiResponse.match(/Job title:\s*(.*)/)?.[1] || "",
+    company: aiResponse.match(/Company:\s*(.*)/)?.[1] || "",
+    startDate: formatDate(aiResponse.match(/Start date:\s*(\d{2}-\d{2}-\d{4})/)?.[1]),
+    endDate: formatDate(aiResponse.match(/End date:\s*(\d{2}-\d{2}-\d{4})/)?.[1]),
+    description: (aiResponse.match(/Description:\s*([\s\S]*)/)?.[1] || "").trim()
   } satisfies WorkExperience
 
 };

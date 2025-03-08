@@ -140,7 +140,11 @@ const WorkExperience = ({id, form, index, remove }: WorkExperieneProps) => {
       </div>
 
       <div className="flex justify-center">
-            <GenerateWorkExperienceButton onWorkExperienceGenerated={exp=>form.setValue(`workExperiences.${index}`,exp)}/>
+       
+            <GenerateWorkExperienceButton
+             onWorkExperienceGenerated={exp=>{form.setValue(`workExperiences.${index}`,exp)
+          }}/>
+          
       </div>
 
       <div className="grid grid-cols-2 gap-2">
@@ -191,7 +195,7 @@ const WorkExperience = ({id, form, index, remove }: WorkExperieneProps) => {
         name={`workExperiences.${index}.startDate`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Start Date</FormLabel>
+            <FormLabel>Stnkhkjart Date</FormLabel>
             <FormControl>
               <Input {...field} type="date" autoFocus></Input>
             </FormControl>
