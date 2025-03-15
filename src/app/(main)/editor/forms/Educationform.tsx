@@ -13,6 +13,7 @@ import { educationSchema, EducationValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
+import GenerateEducationButton from "./GenerateEducatioButton";
 
 const Educationform = ({ resumeData, setResumeData }: EditorFormProps) => {
   const form = useForm<EducationValues>({
@@ -48,6 +49,9 @@ const Educationform = ({ resumeData, setResumeData }: EditorFormProps) => {
       <div className="space-y-1.5 text-center">
         <h2 className="text-lg font-semibold">Education</h2>
       </div>
+
+
+
       <Form {...form}>
         <form className="spce-y-3">
           {fields.map((field, index) => (
@@ -92,6 +96,14 @@ const EducationItem = ({ index, form, remove }: EducationItemProps) => {
     <div className="space-y-3 mb-2 border bg-background p-3">
       <div className="flex justify-between gap-2">
         <span className="font-semibold">Education {index + 1}</span>
+      </div>
+
+      <div className="flex justify-center">
+       
+            <GenerateEducationButton
+             onEducationGenerated={edu=>{form.setValue(`educations.${index}`,edu)
+          }}/>
+          
       </div>
 
       <FormField

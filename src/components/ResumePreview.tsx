@@ -155,7 +155,11 @@ function EducationSection({resumeData}:ResumeSectionProps){
     (edu) => Object.values(edu).filter(Boolean).length > 0
   );
 
+  
+
   if (!educationsNotEmpty?.length) return null;
+
+
   return (
     <>
       <hr className="border-2"  style={{borderColor:colorHex}}/>

@@ -2,6 +2,9 @@
 
 import groq from "@/lib/groq";
 import {
+  Education,
+  GenerateEducationInput,
+  generateEducationSchema,
   GenerateSummaryInput,
   generateSummarySchema,
   generateWorkExpereinceSchema,
@@ -65,7 +68,7 @@ export const GenerateWorkExperience = async (
 
   const {description} = generateWorkExpereinceSchema.parse(input)
 
-  const systemMessage = `You are an ai resume generator.Your task is to generate a single work experience enrty according to the user input.Your response should/must adhere the following structure.You can omit fields if they can't be infered from the provided data,but don't any add ones.
+  const systemMessage = `You are an ai resume generator.Your task is to generate a single work experience enrty according to the user input.Your response should/must adhere the following structure.You can omit fields if they can't be infered from the provided data,but don't  add any ones.
   
   Job title:<job title>
   Company:<company name>
@@ -96,7 +99,7 @@ export const GenerateWorkExperience = async (
   if (!aiResponse) {
     throw new Error("failed to generate ai response");
   }
-console.log(aiResponse)
+
 const formatDate = (date: string | undefined): string | undefined => {
   if (!date) 
     return undefined; // Handle missing dates
@@ -111,8 +114,6 @@ const formatDate = (date: string | undefined): string | undefined => {
       
 };
   return {
-    
-
     position: aiResponse.match(/Job title:\s*(.*)/)?.[1] || "",
     company: aiResponse.match(/Company:\s*(.*)/)?.[1] || "",
     startDate: formatDate(aiResponse.match(/Start date:\s*(\d{2}-\d{2}-\d{4})/)?.[1]),
@@ -121,3 +122,57 @@ const formatDate = (date: string | undefined): string | undefined => {
   } satisfies WorkExperience
 
 };
+
+
+export const GenerateEducation = async (input:GenerateEducationInput) =>{
+  
+  const {description} = generateEducationSchema.parse(input)
+
+  const systemMessage = `You are an ai resume generator.Your task is to generate a single Education enrty according to the user input.Your response should/must adhere the following structure.You can omit fields if they can't be infered from the provided data,but don't  add any ones.
+  
+  School:<School>
+  Degree:<Degree name>
+  Start date:<format:MM-DD-YYYY>(only if provided)
+  End date:<format:MM-DD-YYYY>(only if provided)
+  `
+
+  const userMessage = ` Please provide a education entry from this description:${description}`
+
+  
+  const completion = await groq.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: systemMessage,
+      },
+      {
+        role: "user",
+        content: userMessage,
+      },
+    ],
+    model: "llama-3.3-70b-versatile",
+  });
+
+  const aiResponse = completion.choices[0].message.content;
+  // console.log(aiResponse);
+  if (!aiResponse) {
+    throw new Error("failed to generate ai response");
+  }
+
+  const formatDate = (date: string | undefined): string | undefined => {
+    if (!date) 
+      return undefined; 
+
+    const match = date.match(/(\d{2})-(\d{2})-(\d{4})/); 
+    if (!match) return undefined;
+    const [_, month, day, year] = match;
+    return `${year}-${month}-${day}`; 
+  };
+    return {
+      school: aiResponse.match(/School:\s*(.*)/)?.[1] || "",
+      degree: aiResponse.match(/Degree:\s*(.*)/)?.[1] || "",
+      startDate: formatDate(aiResponse.match(/Start date:\s*(\d{2}-\d{2}-\d{4})/)?.[1]),
+      endDate: formatDate(aiResponse.match(/End date:\s*(\d{2}-\d{2}-\d{4})/)?.[1])
+    } satisfies Education
+
+}
