@@ -31,7 +31,7 @@ const ResumeEditor =  ({resumeToEdit}:ResumeToEdit) => {
   );
   
   const [showSmPreview,setShowSmPreview] = useState(false)
- 
+
   const {isSaving,hasUnSavedChanges} = useAutoSaveResume(resumeData)
 
   useUnLoadWarning(hasUnSavedChanges)
@@ -55,16 +55,14 @@ const ResumeEditor =  ({resumeToEdit}:ResumeToEdit) => {
     <div className="flex grow flex-col h-full">
       <header className=" space-y-1.5 border-b text-center">
         <div className="flex flex-col text-center justify-center p-2">
-          <h1 className="lg:text-xl xl:text-xl md:text-md sm:text-sm font-bold">
+          <h1 className=" text-sm lg:text-xl xl:text-xl md:text-lg sm:text-lg font-bold">
             Design your resume
           </h1>
-          <span className="text-muted-foreground text-sm">
-            Progress will be saved automatically
-          </span>
+         
         </div>
       </header>
 
-      <div className="flex w-full h-[75vh] p-2">
+      <div className="flex w-full h-[78vh] p-2">
         <div className={cn("w-full md:w-1/2  space-y-2 no-scrollbar md:block  p-2 overflow-auto",showSmPreview&&"hidden")}>
           <Brudscrumb
             currentStep={currentStep}

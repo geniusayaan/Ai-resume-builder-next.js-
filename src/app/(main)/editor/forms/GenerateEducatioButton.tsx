@@ -23,10 +23,10 @@ export default  function GenerateEducationButton({
 
   return (
       <>
-    <Button type="button" variant={"outline"} onClick={()=>setShowInputDilog(true)}>
     
-  <WandSparklesIcon   type="button" className={"px-2 p-1 rounded-md size-10 cursor-pointer border "} >Smart fill (AI)</WandSparklesIcon>
-    </Button>
+    
+  <WandSparklesIcon onClick={()=>setShowInputDilog(true)}   type="button" className={"px-2 p-1 rounded-md size-10 cursor-pointer border "} >Smart fill (AI)</WandSparklesIcon>
+    
 
     <InputDialog open={showInputDialog} onEducationGenerated={(Experience)=>{
        onEducationGenerated(Experience)
