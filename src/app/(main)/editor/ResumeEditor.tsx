@@ -34,7 +34,6 @@ const ResumeEditor =  ({resumeToEdit}:ResumeToEdit) => {
 
   const {isSaving,hasUnSavedChanges} = useAutoSaveResume(resumeData)
 
-  useUnLoadWarning(hasUnSavedChanges)
 
   const currentStep = searchParams.get("step") || steps[0].key;
 
@@ -42,7 +41,7 @@ const ResumeEditor =  ({resumeToEdit}:ResumeToEdit) => {
     const newSearchParams = new URLSearchParams(searchParams);
   
     newSearchParams.set("step", key);
-    window.history.pushState(null, "", `?${newSearchParams.toString()}`);
+    window.history.pushState(null, "",`?${newSearchParams.toString()}`);
   }
   
 
@@ -51,6 +50,11 @@ const ResumeEditor =  ({resumeToEdit}:ResumeToEdit) => {
   const FormComponent = steps.find(
     (steps) => steps.key === currentStep
   )?.component;
+
+  useUnLoadWarning(hasUnSavedChanges)
+
+
+
   return (
     <div className="flex grow flex-col h-full">
       <header className=" space-y-1.5 border-b text-center">

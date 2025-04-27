@@ -30,7 +30,6 @@ const page = async ({ searchParams }: PageProps) => {
     <div>
       <Suspense fallback={<div>Loading...</div>}>
         {" "}
-        {/* Suspense Wrapper */}
         <ResumeEditor resumeToEdit={resumeToEdit}/>
       </Suspense>
     </div>

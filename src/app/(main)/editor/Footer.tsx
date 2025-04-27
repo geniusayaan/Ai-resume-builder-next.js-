@@ -21,7 +21,7 @@ export default function Footer({
   isSaving
 }: FooterProps) {
 
-  console.log(showSmPreview)
+  
   
   const previousStep = steps.find(
     (_, i) => steps[i + 1]?.key === currentStep
