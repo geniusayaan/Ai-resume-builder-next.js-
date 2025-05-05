@@ -76,3 +76,19 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  #resume-prewiew-content{
+    zoom: 1 !important;
+    padding: 0;
+  
+
+  }
+}
+
+
+
+@page{
+  size: A4;
+  margin: 0.6cm;
+}

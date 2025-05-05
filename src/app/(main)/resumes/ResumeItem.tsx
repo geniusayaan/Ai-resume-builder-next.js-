@@ -1,19 +1,21 @@
 "use client";
 
 import ResumePreview from "@/components/ResumePreview";
+import {useReactToPrint} from "react-to-print"
+
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { ResumeServerData } from "@/lib/Types";
 import { mapToResumeValues } from "@/lib/utils";
 import { formatDate } from "date-fns";
-import { LoaderCircle, MoreVertical, Trash2 } from "lucide-react";
+import { LoaderCircle, MoreVertical, PrinterIcon, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { deleteResume } from "./actions";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-
+import dynamic from 'next/dynamic';
 
 
 interface ResumeItemProps {
@@ -21,7 +23,15 @@ interface ResumeItemProps {
 }
 
 const ResumeItem = ({ resume }: ResumeItemProps) => {
+  const contentRef = useRef<HTMLDivElement>(null)
+
   const wasUpdated = resume.updatedAt !== resume.createdAt;
+
+  const reactToPrintFn = useReactToPrint({
+    contentRef,
+    documentTitle:resume.title||"untittled"
+  })
+ 
 
   return (
     <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p-3">
@@ -44,23 +54,24 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
             </Link>
 
             <Link className="inline-block relative w-full" href={`/editor?resumeId=${resume.id}`}>
-         <ResumePreview className={"shadow-sm group-hover:shadow-lg transition-shadow overflow-hidden"} resumeData={mapToResumeValues(resume)}/>
+         <ResumePreview contentRef={contentRef} className={"shadow-sm group-hover:shadow-lg transition-shadow overflow-hidden"} resumeData={mapToResumeValues(resume)}/>
          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent"/>
          </Link>
 
         
 
       </div>
-      <MoreMenu resumeId={resume.id}/>
+      <MoreMenu resumeId={resume.id} onPrint={reactToPrintFn}/>
     </div>
   );
 };
 
 interface MoreMenuProps {
-  resumeId:string
+  resumeId:string;
+  onPrint:()=>void;
 }
 
-const MoreMenu = ({resumeId}:MoreMenuProps) =>{
+const MoreMenu = ({resumeId,onPrint}:MoreMenuProps) =>{
 
   const [confirmationBox,setconfirmationBox] = useState(false)
   
@@ -80,6 +91,10 @@ const MoreMenu = ({resumeId}:MoreMenuProps) =>{
         <DropdownMenuItem onClick={()=>setconfirmationBox(true)} className="flex cursor-pointer items-center gap-2">
          <Trash2 className="size-4"></Trash2>
          Delete
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onPrint}>
+          <PrinterIcon className="size-4"></PrinterIcon>
+            Print or Save
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
