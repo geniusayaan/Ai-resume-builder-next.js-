@@ -32,16 +32,30 @@ const PersonalInform = ({ resumeData, setResumeData }: EditorFormProps) => {
   });
 
   useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
+    const subscription = form.watch((values) => {
+        const updatedPersonalInfo = {
+            ...(values.city && { city: values.city }),
+            ...(values.country && { country: values.country }),
+            ...(values.email && { email: values.email }),
+            ...(values.firstName && { firstName: values.firstName }),
+            ...(values.jobTitle && { jobTitle: values.firstName }),
+            ...(values.phone && { phone: values.firstName }),
+            ...(values.photo && { phone: values.firstName }),
+        };
+      
 
-      if (!isValid) {
-        return;
-      }
-      setResumeData({ ...resumeData, ...values });
+       setResumeData((prev) => {
+    // Merge only the updated fields
+    return {
+        ...prev,
+        ...updatedPersonalInfo,
+    };
+});
+
     });
-    return unsubscribe;
-  }, [form, resumeData, setResumeData]);
+
+    return () => subscription.unsubscribe();
+}, [form, setResumeData, resumeData]);
 
   return (
     <div className="max-w-xl md:mx-12 mx-2 space-y-3">

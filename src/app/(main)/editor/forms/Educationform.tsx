@@ -25,11 +25,7 @@ const Educationform = ({ resumeData, setResumeData }: EditorFormProps) => {
 
   useEffect(() => {
     const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
-
-      if (!isValid) {
-        return;
-      }
+      
       setResumeData({
         ...resumeData,
 
@@ -37,7 +33,7 @@ const Educationform = ({ resumeData, setResumeData }: EditorFormProps) => {
       });
     });
     return unsubscribe;
-  }, [form, resumeData, setResumeData]);
+  }, []);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,

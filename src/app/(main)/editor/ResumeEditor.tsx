@@ -37,15 +37,11 @@ const ResumeEditor =  ({resumeToEdit}:ResumeToEdit) => {
 
   const currentStep = searchParams.get("step") || steps[0].key;
 
-  function setStep(key: string) {
-    const newSearchParams = new URLSearchParams(searchParams);
-  
+ function setStep(key: string) {
+    const newSearchParams = new URLSearchParams(window.location.search);
     newSearchParams.set("step", key);
-    window.history.pushState(null, "",`?${newSearchParams.toString()}`);
-  }
-  
-
-
+    window.history.pushState(null, "", `?${newSearchParams.toString()}`);
+}
 
   const FormComponent = steps.find(
     (steps) => steps.key === currentStep
