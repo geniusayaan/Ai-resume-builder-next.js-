@@ -4,6 +4,10 @@ import Link from "next/link";
 import { FileUser, PenLine } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import GenerateAiResume from "../resumes/Auto ai resume/GenerateAiResume";
+import { saveResume } from "./actions";
+import { ResumeValues } from "@/lib/validation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 interface FooterProps {
   currentStep: String;
@@ -21,6 +25,18 @@ export default function Footer({
   isSaving
 }: FooterProps) {
 
+  const searchParams = useSearchParams()
+
+
+
+  const resumeId =  searchParams.get("resumeId") || undefined;
+
+
+  const saveAiResume  = async (resumeData:ResumeValues) =>{
+          await saveResume({...resumeData,id:resumeId})
+ window.location.reload()
+          
+      }
   
   
   const previousStep = steps.find(
@@ -30,8 +46,8 @@ export default function Footer({
   const nextStep = steps.find((_, i) => steps[i - 1]?.key === currentStep)?.key;
 
   return (
-    <footer className="w-full pt-2 flex items-center justify-center  p-2  border-t">
-      <div className="flex  justify-between  md:px-4 sm:px-2 lg:px-20 xl:px-24  items-center w-full">
+    <footer className="w-full overflow-hidden pt-2 flex items-center justify-center  p-2  border-t">
+      <div className="flex gap-2 sm:gap-16 md:gap-20 lg:gap-32 xl:gap-32  justify-between  md:px-4 sm:px-2 lg:px-20 xl:px-24  items-center w-full">
 
         
          
@@ -63,8 +79,20 @@ export default function Footer({
          >
            Next
          </Button>
+
+         <Link href={"/resumes"}><p>Close</p></Link>
+
          </div>
       
+         </div>
+
+         <div className="flex ">
+           <GenerateAiResume onResumeDataGenerated={resumeData =>{ 
+                      saveAiResume(resumeData)
+
+                     
+                    
+                    }} />
          </div>
        
           <div className="hidden justify-between  w-full items-center md:flex">
@@ -85,10 +113,18 @@ export default function Footer({
             onClick={() => (nextStep ? setCurrentStep(nextStep) : undefined)}
           >
             Next
+
+
           </Button>
+
+
+
           </div>
+
         <div className="text-muted-foreground flex gap-8 justify-between items-center" >
-          <Link href={"/resumes"}>Close</Link>
+                  <Link href={"/resumes"}><p>Close</p></Link>
+
+
           <div className={cn("text-muted-foreground opacity-0",isSaving&&"opacity-100")}>
           ...Saving
         </div>

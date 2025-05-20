@@ -5,10 +5,12 @@ import {
   Education,
   GenerateEducationInput,
   generateEducationSchema,
+  generateResumeSchema,
   GenerateSummaryInput,
   generateSummarySchema,
   generateWorkExpereinceSchema,
   GenerateWorkExperinceInput,
+  ResumeValues,
   WorkExperience,
 } from "@/lib/validation";
 
@@ -176,3 +178,100 @@ export const GenerateEducation = async (input:GenerateEducationInput) =>{
     } satisfies Education
 
 }
+
+export const GenerateResumeData = async (input: ResumeValues) => {
+    const { description } = generateResumeSchema.parse(input);
+
+    const systemMessage = `You are an AI-powered resume builder designed to assist users in creating professional, tailored resumes. Your task is to interact with users through a series of questions to gather necessary information and then generate a comprehensive resume based on their input. Give it in the following strict order without any extra text:
+
+    Title: <ResumeTitle> (only if provided),
+    Description: <Description about resume> (only if provided),
+
+    FirstName: <users firstname> (only if provided),
+    LastName: <users LastName> (only if provided),
+    JobTitle: <users JobTitle> (only if provided),
+    City: <users City> (only if provided),
+    Country: <users Country> (only if provided),
+    Phone: <users Phone> (only if provided),
+    Email: <users Email> (only if provided),
+
+    workExperiences:
+      - position: optionalString
+        company: optionalString
+        startDate: optionalString
+        endDate: optionalString
+        description: optionalString
+    (array format if more than one)
+
+    educations:
+      - degree: optionalString
+        school: optionalString
+        startDate: optionalString
+        endDate: optionalString
+    (array format if more than one)
+
+    skills: [string, string, ...] (only if provided),
+
+    summary: (only if provided),
+
+    If anything is not provided by the user, leave it as an empty string or empty array.
+    `;
+
+    const userMessage = `Please provide a resume entry from this data: ${description}`;
+
+    const response = await groq.chat.completions.create({
+        messages: [
+            { role: "system", content: systemMessage },
+            { role: "user", content: userMessage },
+        ],
+        model: "llama-3.3-70b-versatile",
+    });
+
+    const aiResponse = response.choices[0].message.content;
+    if (!aiResponse) {
+        throw new Error("Failed to generate AI response");
+    }
+
+    const extractField = (label: string) => aiResponse.match(new RegExp(`${label}:\s*(.*)`))?.[1]?.trim() || "";
+
+    const firstName = extractField("FirstName");
+    const lastName = extractField("LastName");
+    const jobTitle = extractField("JobTitle");
+    const city = extractField("City");
+    const country = extractField("Country");
+    const phone = extractField("Phone");
+    const email = extractField("Email");
+    const summary = extractField("Summary");
+
+    const workExperiences = Array.from(aiResponse.matchAll(/- position: (.*)\n\s*company: (.*)\n\s*startDate: (.*)\n\s*endDate: (.*)\n\s*description: (.*)/g)).map(match => ({
+        position: match[1]?.trim() || "",
+        company: match[2]?.trim() || "",
+        startDate: match[3]?.trim() || "",
+        endDate: match[4]?.trim() || "",
+        description: match[5]?.trim() || "",
+    }));
+
+    const educations = Array.from(aiResponse.matchAll(/- degree: (.*)\n\s*school: (.*)\n\s*startDate: (.*)\n\s*endDate: (.*)/g)).map(match => ({
+        degree: match[1]?.trim() || "",
+        school: match[2]?.trim() || "",
+        startDate: match[3]?.trim() || "",
+        endDate: match[4]?.trim() || "",
+    }));
+
+    const skillsMatch = aiResponse.match(/Skills:\s*\[(.*)\]/);
+    const skills = skillsMatch ? skillsMatch[1].split(',').map(skill => skill.trim()).filter(Boolean) : [];
+
+    return {
+        firstName,
+        lastName,
+        jobTitle,
+        city,
+        country,
+        phone,
+        email,
+        workExperiences,
+        educations,
+        skills,
+        summary,
+    } satisfies ResumeValues;
+};
