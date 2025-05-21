@@ -116,6 +116,12 @@ export const generateEducationSchema = z.object({
 
 export type GenerateEducationInput = z.infer<typeof generateEducationSchema>
 
+export const generateResumeSchema = z.object({
+  description:z.string().trim().min(1,"First tell about your resume").min(10, "Charecters must be at least 5 charecters long"),
+})
+
+export type GenerateResumeInput = z.infer<typeof generateResumeSchema>
+
 export const generateSummarySchema = z.object({
   jobtitle: optionalString,
   ...workExperiencesSchema.shape,

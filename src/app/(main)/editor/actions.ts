@@ -7,8 +7,11 @@ import { del, put } from "@vercel/blob";
 import path from "path";
 
 export async function saveResume(values: ResumeValues) {
+
+  
   const { id } = values;
-  const { photo, educations, workExperiences, ...resumeValues } =
+
+  const { photo, educations, workExperiences,...resumeValues } =
     resumeSchema.parse(values);
 
   const { userId } = await auth();
@@ -46,12 +49,21 @@ export async function saveResume(values: ResumeValues) {
   }
 
   if (id) {
+    const mergedValues = {
+  ...existingResume,
+  ...Object.fromEntries(
+    Object.entries(resumeValues).filter(
+      ([_, value]) => value !== undefined && value !== null && value !== ""
+    )
+  ),
+};
+
     return prisma.resume.update({
       where: { id },
       data: {
         id:id,
-        ...resumeValues,
-        photoUrl: newPhotoUrl,
+        ...mergedValues,
+        photoUrl: newPhotoUrl ?? existingResume?.photoUrl,
         workExperiences: {
           deleteMany: {},
           create: workExperiences?.map((exp) => ({

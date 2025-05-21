@@ -1,14 +1,12 @@
 
-import ResumeItem from "./ResumeItem";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { PlusCircleIcon } from "lucide-react";
-import { auth } from "@clerk/nextjs/server";
+import { EditorFormProps, resumeDataInclude } from "@/lib/Types";
 import prisma from "@/lib/prisma";
-import { resumeDataInclude } from "@/lib/Types";
+import { auth } from "@clerk/nextjs/server";
+import ResumePageClient from "./ResumePageClient";
 
-export default async function Page() {
-  const { userId } = await auth();
+export default async function Page({setResumeData}:EditorFormProps) {
+
+const { userId } = await auth();
       
       if (!userId) {
           return null;
@@ -26,8 +24,8 @@ export default async function Page() {
               where: { userId },
           }),
       ]);
-  
 
+<<<<<<< HEAD
   return (
     <main className="mx-auto w-full max-w-7xl space-y-6 px-3 py-6">
       <Button asChild className="w-[300px] h-[42px] rounded-full ">
@@ -36,17 +34,11 @@ export default async function Page() {
           Add a resume
         </Link>
       </Button>
+=======
+>>>>>>> origin/main
 
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold">Your resumes</h1>
-        <p>Total: {totalResumeCount}</p>
-      </div>
-
-      <div className="flex flex-col sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-3">
-        {resumes.map((resume) => (
-          <ResumeItem resume={resume} key={resume.id} />
-        ))}
-      </div>
-    </main>
-  );
+      return (
+        <ResumePageClient resumes={resumes} totalResumeCount={totalResumeCount}/>
+      )
+    
 }

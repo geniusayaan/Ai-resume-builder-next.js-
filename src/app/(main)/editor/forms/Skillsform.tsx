@@ -17,7 +17,11 @@ const Skillsform = ({resumeData,setResumeData}:EditorFormProps) => {
 
      useEffect(() => {
         const { unsubscribe } = form.watch(async (values) => {
+<<<<<<< HEAD
          
+=======
+          
+>>>>>>> resume-ai-work
           setResumeData({...resumeData,skills:values.skills?.filter(skill => skill!==undefined).map(skill=>skill.trim()).filter(skill=>skill!=="")})
         });
         return unsubscribe;

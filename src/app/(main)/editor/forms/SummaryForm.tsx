@@ -17,7 +17,12 @@ const SummaryForm = ({resumeData,setResumeData}:EditorFormProps) => {
     })
 
      useEffect(() => {
+<<<<<<< HEAD
         const subscription = form.watch( (values) => {
+=======
+        const { unsubscribe } = form.watch(async (values) => {
+         
+>>>>>>> resume-ai-work
           setResumeData({...resumeData,summary:values.summary})
         });
         return ()=>subscription.unsubscribe();
