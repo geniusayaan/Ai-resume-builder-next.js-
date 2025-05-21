@@ -30,7 +30,7 @@ export default async function Page() {
 
   return (
     <main className="mx-auto w-full max-w-7xl space-y-6 px-3 py-6">
-      <Button asChild className="w-[200px] h-[42px]">
+      <Button asChild className="w-[300px] h-[42px] rounded-full ">
         <Link href="/editor">
           <PlusCircleIcon />
           Add a resume

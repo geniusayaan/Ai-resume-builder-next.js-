@@ -4,11 +4,12 @@ import "./globals.css";
 import {ThemeProvider} from "next-themes"
 import {ClerkProvider} from "@clerk/nextjs"
 import { Toaster } from "@/components/ui/toaster";
+import Navbar from "./(main)/Navbar";
 
 export const metadata: Metadata = {
   title: {
-    template:"%s - Ai resume builder",
-    absolute:"Ai resume builder"
+    template:"%s - GenieResumay",
+    absolute:"GenieResumay"
   },
   description: "created by ayaan mehdi",
 };
@@ -21,9 +22,12 @@ export default function RootLayout({
   return (
     <ClerkProvider>
         <html lang="en" suppressHydrationWarning>
-      <body
-        className={`antialiased`}
-      >
+      <body 
+  className={`antialiased bg-[#f1f1f1]`}
+>
+
+  <Navbar />
+
         <ThemeProvider attribute={"class"}
         defaultTheme="system"
         enableSystem
