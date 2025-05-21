@@ -6,7 +6,7 @@ export default function LandingPage() {
 
 
 
-    <main className="bg-[#f1f1f1] text-black min-h-screen px-6 py-12 md:px-20">
+    <main className=" text-black min-h-screen px-6 py-12 md:px-20">
       {/* Hero */}
       <section className="text-center mb-20">
         <h1 className="text-5xl md:text-6xl font-bold leading-tight">

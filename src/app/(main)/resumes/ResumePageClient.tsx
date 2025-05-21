@@ -29,7 +29,7 @@ const ResumePageClient = ({resumes,totalResumeCount}:ResumePageClientProps) => {
   return (
     
         <main className="mx-auto w-full max-w-7xl space-y-6 px-3 py-6">
-            <Button asChild className="w-[200px] h-[42px]">
+            <Button asChild className="rounded-full w-[200px] h-[42px]">
                 <Link href="/editor">
                     <PlusCircleIcon />
                     Add a resume
@@ -37,12 +37,12 @@ const ResumePageClient = ({resumes,totalResumeCount}:ResumePageClientProps) => {
             </Button>
 
             <div className="space-y-1">
-                <h1 className="text-3xl font-bold">Your resumes</h1>
-                <p>Total: {totalResumeCount}</p>
+                <h1 className="text-3xl font-bold">Your resumes   
+                  {totalResumeCount} </h1>
             </div>
 
           
-                <div className='w-full h-20 bg-white'>
+                <div className='w-full h-20 '>
                     <GenerateAiResume onResumeDataGenerated={resumeData =>{ 
                       saveAiResume(resumeData)
                       console.log(resumeData)

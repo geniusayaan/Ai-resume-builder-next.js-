@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useToast } from '@/hooks/use-toast';
-import { resumeSchema, ResumeValues } from '@/lib/validation';
+import { GenerateResumeInput, resumeSchema, ResumeValues } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -22,8 +22,9 @@ const GenerateAiResume = ({onResumeDataGenerated}:GenerateAiResumeProps) => {
     
   return (
     <>
-    <Button className='space-y-1 w-[7rem] h-[1.5rem] sm:h-[2rem] sm:w-[9rem]
-    md:h-[2rem] md:w-[8rem] lg:h-[3rem] lg:w-[9rem] xl:h-[3rem] xl:w-[10rem] hover:bg-purple-900 bg-purple-950 text-white' onClick={()=>setShowInputDilog(true)}>{pathname==="/editor"?"Upgrade with AI":"Generate"}</Button>
+    <Button className='rounded-full space-y-1 w-[7rem] h-[1.5rem] sm:h-[2rem] sm:w-[9rem]
+    md:h-[2rem] md:w-[8rem] lg:h-[3rem] lg:w-[9rem] xl:h-[3rem] xl:w-[10rem] hover:bg-purple-900 bg-purple-950 text-white' onClick={()=>setShowInputDilog(true)}>{pathname==="/editor"?"Update with AI":"Generate With AI"}   
+    </Button>
     
    <InputDialog onResumeDataGenerated={(resumeData=>{
     onResumeDataGenerated(resumeData)
@@ -58,11 +59,57 @@ export function InputDialog({ open, onOpenChange, onResumeDataGenerated }: Input
         },
     });
 
-    const onSubmit = async (data: ResumeValues) => {
-        try {
-            const response = await GenerateResumeData(data);
+
+
+
+    const questions = [
+  { key: "name", label: "What's your name?" },
+  { key: "age", label: "What's your age?" },
+  { key: "city", label: "Which city do you live in?" },
+  { key: "job", label: "What's your current job or goal?" },
+  { key: "Country", label: "Which Country do you live?" },
+  { key: "Email", label: "What's your email?" },
+  { key: "Phone ", label: "What's your Phone no.?" },
+  { key: "skills", label: "What are  your skills?" },
+  { key: "workExperiences", label: "What work have you done (define it)?" },
+  { key: "educations", label: "Whatabout your education (define in brief)?" },
+];
+
+
+
+const [step, setStep] = useState(0);
+const [currentAnswer, setCurrentAnswer] = useState("");
+const [userDescription, setUserDescription] = useState("");
+
+const handleNext = async () => {
+  const { key } = questions[step];
+
+  setUserDescription((prev) => 
+    prev ? `${prev}, ${key}: ${currentAnswer}` : `${key}: ${currentAnswer}`
+  );
+
+  setCurrentAnswer("");
+  form.setValue("description", "");
+ 
+  if (step < questions.length - 1) {
+    setStep(step + 1);
+  } else {
+   
+               const response = await GenerateResumeData(userDescription);
+
             onResumeDataGenerated(response);
-            onOpenChange(false);  
+
+
+    onOpenChange(false);
+  }
+};
+
+
+    const onSubmit = async () => {
+        try {
+            handleNext()
+            console.log("step")
+            
         } catch (error) {
             console.error(error);
             toast({
@@ -86,11 +133,13 @@ export function InputDialog({ open, onOpenChange, onResumeDataGenerated }: Input
                     <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
                         <FormField name="description" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Description</FormLabel>
+                                <FormLabel>{questions[step].label}</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         {...field}
-                                        placeholder="E.g. 'From Nov 2019 to Dec 2020, I worked at Google as a software engineer. Tasks included...'"
+                                        placeholder={`${questions[step].key=="workExperiences"||"educations"?`enter your ${questions[step].key}`
+                                        :
+                                        `Tell us about your ${questions[step].key} so we can create.`}`}
                                         autoFocus
                                     />
                                 </FormControl>
@@ -102,7 +151,8 @@ export function InputDialog({ open, onOpenChange, onResumeDataGenerated }: Input
                             {form.formState.isSubmitting ? (
                                 <span className="inline-block w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></span>
                             ) : (
-                                "Generate"
+                            
+                                `${step < questions.length - 1?"Next":"Generate"}`
                             )}
                         </Button>
                     </form>

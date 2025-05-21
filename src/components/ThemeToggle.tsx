@@ -11,11 +11,12 @@ const ThemeToggle = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={"ghost"} size="icon">
-          <Sun className="size-[2rem] rotate-o  scale-150 transition-all dark:-rotate-90 dark:scale-0"></Sun>
-          <Moon className="size-[2rem] absolute rotate-90 scale-0 transition-all dark:scale-150"></Moon>
-          <span className="sr-only">Toggle theme</span>
-        </Button>
+      <Button variant="ghost" size="icon">
+  <Sun className="h-8 w-8 rotate-0 scale-90 transition-all dark:-rotate-90 dark:scale-0" />
+  <Moon className="absolute h-9 w-8 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+</Button>
+
+
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={()=>setTheme("light")}>

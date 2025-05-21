@@ -5,6 +5,7 @@ import {
   Education,
   GenerateEducationInput,
   generateEducationSchema,
+  GenerateResumeInput,
   generateResumeSchema,
   GenerateSummaryInput,
   generateSummarySchema,
@@ -179,8 +180,8 @@ export const GenerateEducation = async (input:GenerateEducationInput) =>{
 
 }
 
-export const GenerateResumeData = async (input: ResumeValues) => {
-    const { description } = generateResumeSchema.parse(input);
+export const GenerateResumeData = async (input: string) => {
+    const  description  = input;
 
     const systemMessage = `You are an AI-powered resume builder designed to assist users in creating professional, tailored resumes. Your task is to interact with users through a series of questions to gather necessary information and then generate a comprehensive resume based on their input. Give it in the following strict order without any extra text:
 

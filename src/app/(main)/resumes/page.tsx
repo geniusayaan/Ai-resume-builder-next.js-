@@ -25,17 +25,6 @@ const { userId } = await auth();
           }),
       ]);
 
-<<<<<<< HEAD
-  return (
-    <main className="mx-auto w-full max-w-7xl space-y-6 px-3 py-6">
-      <Button asChild className="w-[300px] h-[42px] rounded-full ">
-        <Link href="/editor">
-          <PlusCircleIcon />
-          Add a resume
-        </Link>
-      </Button>
-=======
->>>>>>> origin/main
 
       return (
         <ResumePageClient resumes={resumes} totalResumeCount={totalResumeCount}/>

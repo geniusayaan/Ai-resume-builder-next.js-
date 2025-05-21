@@ -32,7 +32,6 @@ const PersonalInform = ({ resumeData, setResumeData }: EditorFormProps) => {
   });
 
   useEffect(() => {
-<<<<<<< HEAD
     const subscription = form.watch((values) => {
         const updatedPersonalInfo = {
             ...(values.city && { city: values.city }),
@@ -53,11 +52,6 @@ const PersonalInform = ({ resumeData, setResumeData }: EditorFormProps) => {
     };
 });
 
-=======
-    const { unsubscribe } = form.watch(async (values) => {
-      
-      setResumeData({ ...resumeData, ...values });
->>>>>>> resume-ai-work
     });
 
     return () => subscription.unsubscribe();

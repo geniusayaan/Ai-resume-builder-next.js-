@@ -34,7 +34,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
  
 
   return (
-    <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p-3">
+    <div className="bg-[#d4cdcd] group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p-3">
       <div className="space-y-3 ">
      <Link href={`/editor?resumeId=${resume.id}`}>    
      <div className="flex items-center flex-col w-full h-[4rem]"> 
