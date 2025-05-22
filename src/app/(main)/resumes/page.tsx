@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import ResumePageClient from "./ResumePageClient";
 
- async function Page({setResumeData}:EditorFormProps) {
+ async function Page() {
 
 const { userId } = await auth();
       
