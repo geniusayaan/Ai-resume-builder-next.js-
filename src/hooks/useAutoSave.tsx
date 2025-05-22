@@ -20,13 +20,12 @@ export default function useAutoSaveResume(resumeData: ResumeValues) {
 
   const debouncedResumeData = useDebounce(resumeData, 1000);
 
-  const saveInProgress = useRef<Promise<void> | null>(null); // Track ongoing save promise
-
+  const saveInProgress = useRef<Promise<void> | null>(null); 
   useEffect(() => {
     setIsError(false);
   }, [debouncedResumeData]);
 
-  // Convert objects to JSON strings to ensure stable dependencies
+  
   const debouncedResumeDataStr = JSON.stringify(debouncedResumeData);
   const lastSavedDataStr = JSON.stringify(lastSavedData);
 

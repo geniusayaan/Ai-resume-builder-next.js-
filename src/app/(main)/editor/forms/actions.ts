@@ -201,7 +201,7 @@ export const GenerateResumeData = async (input: string) => {
         company: optionalString
         startDate: optionalString
         endDate: optionalString
-        description: optionalString
+        description: optionalString(if not provided bases on the work create it)
     (array format if more than one)
 
     educations:
@@ -211,11 +211,12 @@ export const GenerateResumeData = async (input: string) => {
         endDate: optionalString
     (array format if more than one)
 
-    skills: [string, string, ...] (only if provided),
+    Skills: [string, string, ...] (skills),
 
-    summary: (only if provided),
+    Summary: (Accoding to the deatails like work experices and other skills and thers thing the user said in other combine them and create a proffesional profile (summary)),
 
     If anything is not provided by the user, leave it as an empty string or empty array.
+    and if you think it is a spelling mistake then coorect that only spelling
     `;
 
     const userMessage = `Please provide a resume entry from this data: ${description}`;
@@ -244,20 +245,33 @@ export const GenerateResumeData = async (input: string) => {
     const email = extractField("Email");
     const summary = extractField("Summary");
 
-    const workExperiences = Array.from(aiResponse.matchAll(/- position: (.*)\n\s*company: (.*)\n\s*startDate: (.*)\n\s*endDate: (.*)\n\s*description: (.*)/g)).map(match => ({
-        position: match[1]?.trim() || "",
-        company: match[2]?.trim() || "",
-        startDate: match[3]?.trim() || "",
-        endDate: match[4]?.trim() || "",
-        description: match[5]?.trim() || "",
-    }));
+const rawWorkMatches = Array.from(aiResponse.matchAll(
+  /- position: (.*)\n\s*company: (.*)\n\s*startDate: (.*)\n\s*endDate: (.*)\n\s*description: (.*)/g
+));
 
-    const educations = Array.from(aiResponse.matchAll(/- degree: (.*)\n\s*school: (.*)\n\s*startDate: (.*)\n\s*endDate: (.*)/g)).map(match => ({
-        degree: match[1]?.trim() || "",
-        school: match[2]?.trim() || "",
-        startDate: match[3]?.trim() || "",
-        endDate: match[4]?.trim() || "",
-    }));
+const workExperiences = rawWorkMatches.length
+  ? rawWorkMatches.map(match => ({
+      position: match[1]?.trim() || "",
+      company: match[2]?.trim() || "",
+      startDate: match[3]?.trim() || "",
+      endDate: match[4]?.trim() || "",
+      description: match[5]?.trim() || "",
+    }))
+  : undefined;
+
+  const rawEduMatches = Array.from(aiResponse.matchAll(
+  /- degree: (.*)\n\s*school: (.*)\n\s*startDate: (.*)\n\s*endDate: (.*)/g
+));
+
+const educations = rawEduMatches.length
+  ? rawEduMatches.map(match => ({
+      degree: match[1]?.trim() || "",
+      school: match[2]?.trim() || "",
+      startDate: match[3]?.trim() || "",
+      endDate: match[4]?.trim() || "",
+    }))
+  : undefined;
+
 
     const skillsMatch = aiResponse.match(/Skills:\s*\[(.*)\]/);
     const skills = skillsMatch ? skillsMatch[1].split(',').map(skill => skill.trim()).filter(Boolean) : [];

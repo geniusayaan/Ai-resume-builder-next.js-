@@ -7,23 +7,21 @@ import { del, put } from "@vercel/blob";
 import path from "path";
 
 export async function saveResume(values: ResumeValues) {
-
-  
   const { id } = values;
 
-  const { photo, educations, workExperiences,...resumeValues } =
+  const { photo, educations, workExperiences, skills, ...resumeValues } =
     resumeSchema.parse(values);
 
   const { userId } = await auth();
-
-  
 
   if (!userId) {
     throw new Error("user not authenticated");
   }
 
   const existingResume = id
-    ? await prisma.resume.findUnique({ where: { id, userId } })
+    ? await prisma.resume.findUnique({
+        where: { id, userId },
+      })
     : null;
 
   if (id && !existingResume) {
@@ -41,7 +39,7 @@ export async function saveResume(values: ResumeValues) {
       access: "public",
     });
     newPhotoUrl = blob.url;
-  } else if (photo === null) {
+  } else if (photo === undefined) {
     if (existingResume?.photoUrl) {
       await del(existingResume.photoUrl);
     }
@@ -50,38 +48,51 @@ export async function saveResume(values: ResumeValues) {
 
   if (id) {
     const mergedValues = {
-  ...existingResume,
-  ...Object.fromEntries(
-    Object.entries(resumeValues).filter(
-      ([_, value]) => value !== undefined && value !== null && value !== ""
-    )
-  ),
-};
+      ...existingResume,
+      ...Object.fromEntries(
+        Object.entries(resumeValues).filter(
+          ([_, value]) => value !== undefined && value !== null && value !== ""
+        )
+      ),
+    };
 
     return prisma.resume.update({
       where: { id },
       data: {
-        id:id,
+        id: id,
         ...mergedValues,
+        skills: skills?.length
+          ? Array.from(new Set([...(existingResume?.skills ?? []), ...skills]))
+          : existingResume?.skills,
+
         photoUrl: newPhotoUrl ?? existingResume?.photoUrl,
-        workExperiences: {
-          deleteMany: {},
-          create: workExperiences?.map((exp) => ({
-            ...exp,
-            startDate: exp.startDate ? new Date(exp.startDate) : undefined,
-            endDate: exp.endDate ? new Date(exp.endDate) : undefined,
 
-          })),
-        },
-        educations: {
-          deleteMany: {},
-          create: educations?.map((edu) => ({
-            ...edu,
-            startDate: edu.startDate ? new Date(edu.startDate) : undefined,
-            endDate: edu.endDate ? new Date(edu.endDate) : undefined,
+        workExperiences:{
+              deleteMany:{},
+                create: workExperiences?.map((exp) => ({
+                  ...exp,
+                  startDate: exp.startDate
+                    ? new Date(exp.startDate)
+                    : undefined,
+                  endDate: exp.endDate ? new Date(exp.endDate) : undefined,
+                })),
+              },
 
-          })),
-        },
+        educations:  {
+
+              deleteMany:{},
+
+                create: educations?.map((edu) => ({
+                  ...edu,
+                  startDate: edu.startDate
+                    ? new Date(edu.startDate)
+                    : undefined,
+                  endDate: edu.endDate ? new Date(edu.endDate) : undefined,
+                })),
+         
+              }
+         ,
+
         updatedAt: new Date(),
       },
     });
@@ -109,5 +120,3 @@ export async function saveResume(values: ResumeValues) {
     });
   }
 }
-
-

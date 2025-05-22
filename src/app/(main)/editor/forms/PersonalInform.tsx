@@ -32,29 +32,12 @@ const PersonalInform = ({ resumeData, setResumeData }: EditorFormProps) => {
   });
 
   useEffect(() => {
-    const subscription = form.watch((values) => {
-        const updatedPersonalInfo = {
-            ...(values.city && { city: values.city }),
-            ...(values.country && { country: values.country }),
-            ...(values.email && { email: values.email }),
-            ...(values.firstName && { firstName: values.firstName }),
-            ...(values.jobTitle && { jobTitle: values.firstName }),
-            ...(values.phone && { phone: values.firstName }),
-            ...(values.photo && { phone: values.firstName }),
-        };
-      
-
-       setResumeData((prev) => {
-    // Merge only the updated fields
-    return {
-        ...prev,
-        ...updatedPersonalInfo,
-    };
-});
+    const {unsubscribe} = form.watch((values) => {
+           setResumeData({...resumeData,...values});
 
     });
 
-    return () => subscription.unsubscribe();
+    return unsubscribe;
 }, [form, setResumeData, resumeData]);
 
   return (

@@ -12,8 +12,10 @@ import { saveResume } from '../../editor/actions';
 import { usePathname, useRouter } from 'next/navigation';
 
 
+
 interface GenerateAiResumeProps {
    onResumeDataGenerated:(resumeData:ResumeValues) => void;
+   
 }
 
 const GenerateAiResume = ({onResumeDataGenerated}:GenerateAiResumeProps) => {
@@ -28,6 +30,7 @@ const GenerateAiResume = ({onResumeDataGenerated}:GenerateAiResumeProps) => {
     
    <InputDialog onResumeDataGenerated={(resumeData=>{
     onResumeDataGenerated(resumeData)
+
        setShowInputDilog(false)
    })} open={showInputDialog} onOpenChange={setShowInputDilog}/>
    </>
@@ -36,11 +39,6 @@ const GenerateAiResume = ({onResumeDataGenerated}:GenerateAiResumeProps) => {
 
 export default GenerateAiResume
 
-interface InputDialogProps {
-    open:boolean;
-    onOpenChange:(open:boolean)=>void;
-    onResumeDataGenerated:(resumeData:ResumeValues)=>void;
-}
 
 
 
@@ -72,12 +70,13 @@ export function InputDialog({ open, onOpenChange, onResumeDataGenerated }: Input
   { key: "Phone ", label: "What's your Phone no.?" },
   { key: "skills", label: "What are  your skills?" },
   { key: "workExperiences", label: "What work have you done (define it)?" },
-  { key: "educations", label: "Whatabout your education (define in brief)?" },
+  { key: "educations", label: "What about your education (define in brief)?" },
 ];
 
-
+ 
 
 const [step, setStep] = useState(0);
+
 const [currentAnswer, setCurrentAnswer] = useState("");
 const [userDescription, setUserDescription] = useState("");
 
@@ -89,18 +88,20 @@ const handleNext = async () => {
   );
 
   setCurrentAnswer("");
+
   form.setValue("description", "");
  
   if (step < questions.length - 1) {
     setStep(step + 1);
   } else {
-   
                const response = await GenerateResumeData(userDescription);
 
             onResumeDataGenerated(response);
 
+            console.log("object")
+            
+                
 
-    onOpenChange(false);
   }
 };
 
@@ -108,7 +109,7 @@ const handleNext = async () => {
     const onSubmit = async () => {
         try {
             handleNext()
-            console.log("step")
+           
             
         } catch (error) {
             console.error(error);
@@ -136,7 +137,8 @@ const handleNext = async () => {
                                 <FormLabel>{questions[step].label}</FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        {...field}
+                                        value={currentAnswer}
+                                        onChange={(e) => setCurrentAnswer(e.target.value)}
                                         placeholder={`${questions[step].key=="workExperiences"||"educations"?`enter your ${questions[step].key}`
                                         :
                                         `Tell us about your ${questions[step].key} so we can create.`}`}
@@ -152,7 +154,7 @@ const handleNext = async () => {
                                 <span className="inline-block w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></span>
                             ) : (
                             
-                                `${step < questions.length - 1?"Next":"Generate"}`
+                                `${step < questions.length - 1 ? "Next":"Generate"}`
                             )}
                         </Button>
                     </form>
