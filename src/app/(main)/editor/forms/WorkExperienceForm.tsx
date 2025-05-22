@@ -38,7 +38,7 @@ const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
   });
 
   useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
+    const subscription = form.watch(async (values) => {
      
       setResumeData({
         ...resumeData,
@@ -47,7 +47,7 @@ const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
           values.workExperiences?.filter((exp) => exp !== undefined) || [],
       });
     });
-    return unsubscribe;
+    return ()=>subscription.unsubscribe();
   }, [form, resumeData, setResumeData]);
 
   const { fields, append, remove, move } = useFieldArray({
