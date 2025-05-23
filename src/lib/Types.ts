@@ -13,5 +13,5 @@ export const resumeDataInclude = {
 
 // ✅ FIXED: Infer return type from actual query method
 export type ResumeServerData = Awaited<
-  ReturnType<typeof prisma.resume.findUnique>
+  ReturnType<typeof Prisma.resume.findUnique>
 >;
