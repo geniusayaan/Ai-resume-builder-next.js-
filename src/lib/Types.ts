@@ -11,6 +11,7 @@ export const resumeDataInclude = {
     educations: true,
 };
 
-export type ResumeServerData = Prisma.ResumeGetPayload<{
-    include: typeof resumeDataInclude;
-}>;
+// ✅ FIXED: Infer return type from actual query method
+export type ResumeServerData = Awaited<
+  ReturnType<typeof prisma.resume.findUnique>
+>;
